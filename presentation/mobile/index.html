@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gradient Descent & Optimizer Variants — Seminar Deck</title>
-  <link rel="stylesheet" href="vendor/katex/katex.min.css">
-  <script defer src="vendor/katex/katex.min.js"></script>
-  <script defer src="vendor/katex/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
   <style>
     :root {
       --bg-main: #0b0f19;
@@ -68,16 +68,8 @@
       letter-spacing: -0.01em;
     }
 
-    .mobile-link {
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .mobile-link:hover,
-    .mobile-link:focus-visible {
-      text-decoration: underline;
+    .desktop-link {
+      display: none;
     }
 
     .brand span.badge {
@@ -499,6 +491,251 @@
         break-after: auto;
       }
     }
+
+    /* Mobile reading fork: preserve the slide content, change the coordinate system. */
+    @media screen and (max-width: 700px) {
+      :root {
+        --bg-main: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f1f5f9;
+        --border-color: #dbe3ee;
+        --text-main: #182230;
+        --text-muted: #536273;
+        --text-dim: #64748b;
+        --primary: #2463a5;
+        --primary-glow: rgba(36, 99, 165, 0.12);
+        --accent: #178a86;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+        width: 100%;
+        user-select: text;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        height: auto;
+        min-height: 58px;
+        padding: 0.65rem 0.85rem;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+        background: rgba(248, 250, 252, 0.96);
+        border-bottom-color: var(--border-color);
+      }
+
+      .brand {
+        min-width: 0;
+        flex: 1 1 100%;
+        gap: 0.45rem;
+        color: var(--text-main);
+        font-size: 0.82rem;
+      }
+
+      .brand span:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .brand span.badge {
+        display: none;
+      }
+
+      .desktop-link {
+        display: inline;
+        flex: 0 0 auto;
+        color: var(--primary);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .desktop-link:hover,
+      .desktop-link:focus-visible {
+        text-decoration: underline;
+      }
+
+      .mobile-link {
+        display: none;
+      }
+
+      .controls {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.35rem;
+      }
+
+      .btn {
+        min-height: 40px;
+        padding: 0.45rem 0.65rem;
+        color: var(--text-main);
+        background: var(--bg-card);
+        border-color: var(--border-color);
+        font-size: 0.78rem;
+      }
+
+      .btn#btn-overview,
+      .btn#btn-fullscreen {
+        display: none;
+      }
+
+      .slide-counter {
+        color: var(--primary);
+        min-width: 58px;
+        font-size: 0.78rem;
+      }
+
+      main#slide-deck {
+        display: block;
+        overflow: visible;
+        padding: 0.75rem;
+      }
+
+      .slide,
+      .slide.active {
+        position: relative;
+        inset: auto;
+        display: flex;
+        width: 100%;
+        min-height: auto;
+        height: auto;
+        margin: 0 0 1rem;
+        padding: 1.25rem 1rem 1.35rem;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07);
+        scroll-margin-top: 9rem;
+      }
+
+      .slide-header {
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.65rem;
+        border-bottom-color: var(--border-color);
+      }
+
+      .slide-category {
+        font-size: 0.68rem;
+        color: var(--primary);
+      }
+
+      .slide-title {
+        font-size: clamp(1.35rem, 6vw, 1.85rem);
+        line-height: 1.12;
+        color: var(--text-main);
+      }
+
+      .slide-body,
+      .slide-body.full-width {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        min-height: 0;
+      }
+
+      .text-content {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        color: var(--text-main);
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .formula-box {
+        margin: 0.85rem 0;
+        padding: 0.8rem 0.85rem;
+        overflow-x: auto;
+        background: #f1f5f9;
+        border-left-color: var(--primary);
+        font-size: 0.9rem;
+      }
+
+      .callout {
+        margin-top: 0.85rem;
+        padding: 0.75rem 0.8rem;
+        color: #155e75;
+        background: #ecfeff;
+        border-color: #a5f3fc;
+        font-size: 0.9rem;
+      }
+
+      .callout.warning {
+        color: #991b1b;
+        background: #fef2f2;
+        border-color: #fecaca;
+      }
+
+      .media-container {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        padding: 0.55rem;
+        background: #f8fafc;
+        border-color: var(--border-color);
+      }
+
+      .media-container img {
+        width: 100%;
+        max-width: 100%;
+        max-height: none;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .media-caption {
+        font-size: 0.72rem;
+        color: var(--text-dim);
+      }
+
+      footer {
+        height: auto;
+        min-height: 42px;
+        padding: 0.65rem 0.85rem;
+        gap: 0.3rem;
+        align-items: flex-start;
+        flex-direction: column;
+        color: var(--text-dim);
+        background: var(--bg-main);
+        border-top-color: var(--border-color);
+        font-size: 0.7rem;
+      }
+
+      .progress-bar-container {
+        display: none;
+      }
+
+      .modal-overlay {
+        padding: 1rem;
+      }
+
+      .grid-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .zoom-overlay {
+        padding: 0.75rem;
+      }
+
+      .zoom-overlay img {
+        max-width: 100vw;
+        max-height: 86vh;
+      }
+    }
   </style>
 </head>
 <body>
@@ -508,7 +745,7 @@
     <div class="brand">
       <span>📐 UIT CS115 Seminar</span>
       <span class="badge">Optimization & Deep Learning</span>
-      <a class="mobile-link" href="mobile/index.html">Mobile view</a>
+      <a class="desktop-link" href="../index.html">Desktop view</a>
     </div>
     <div class="controls">
       <button class="btn" id="btn-prev" title="Previous Slide (← / Backspace)">◀ Prev</button>
@@ -545,7 +782,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/08_optimizer_family_map.svg" alt="Optimizer Family Map">
+          <img src="../../figures/svg/08_optimizer_family_map.svg" alt="Optimizer Family Map">
           <div class="media-caption">Figure 08: The Family Map of Modern Optimizers</div>
         </div>
       </div>
@@ -575,7 +812,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/01_gradient_field_sphere.svg" alt="Gradient Field on Sphere">
+          <img src="../../figures/svg/01_gradient_field_sphere.svg" alt="Gradient Field on Sphere">
           <div class="media-caption">Figure 01: Vector field $\nabla f(x, y)$ pointing radially outward</div>
         </div>
       </div>
@@ -602,7 +839,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/png/02_surface_sphere_3d.png" alt="3D Surface Sphere">
+          <img src="../../figures/png/02_surface_sphere_3d.png" alt="3D Surface Sphere">
           <div class="media-caption">Figure 02: 3D bowl representation with global minimum at origin</div>
         </div>
       </div>
@@ -630,7 +867,7 @@
           <p>For any small $\eta > 0$ and nonzero gradient, the objective is guaranteed to decrease locally!</p>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/03_gd_steps_sphere.svg" alt="GD Steps on Sphere">
+          <img src="../../figures/svg/03_gd_steps_sphere.svg" alt="GD Steps on Sphere">
           <div class="media-caption">Figure 03: Step-by-step negative gradient descent trajectory</div>
         </div>
       </div>
@@ -661,7 +898,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/gradient_descent.gif" alt="Gradient Descent Animation">
+          <img src="../../figures/gif/gradient_descent.gif" alt="Gradient Descent Animation">
           <div class="media-caption">Animated: Gradient Descent trajectory converging to minimum</div>
         </div>
       </div>
@@ -692,7 +929,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/04_learning_rate_ill_conditioned.svg" alt="Learning Rate Regimes">
+          <img src="../../figures/svg/04_learning_rate_ill_conditioned.svg" alt="Learning Rate Regimes">
           <div class="media-caption">Figure 04: Too small, well-tuned, oscillatory, and diverging LR</div>
         </div>
       </div>
@@ -723,7 +960,7 @@
           </div>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/06_nonconvex_local_minima.svg" alt="Nonconvex Landscape">
+          <img src="../../figures/svg/06_nonconvex_local_minima.svg" alt="Nonconvex Landscape">
           <div class="media-caption">Figure 06: Basin of attraction trapping on nonconvex double-well</div>
         </div>
       </div>
@@ -751,7 +988,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/momentum.gif" alt="Momentum Animation">
+          <img src="../../figures/gif/momentum.gif" alt="Momentum Animation">
           <div class="media-caption">Animated: Momentum dampening oscillations and accelerating downhill</div>
         </div>
       </div>
@@ -779,7 +1016,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/nesterov.gif" alt="Nesterov Animation">
+          <img src="../../figures/gif/nesterov.gif" alt="Nesterov Animation">
           <div class="media-caption">Animated: Nesterov trajectory with predictive look-ahead braking</div>
         </div>
       </div>
@@ -807,7 +1044,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/adagrad.gif" alt="AdaGrad Animation">
+          <img src="../../figures/gif/adagrad.gif" alt="AdaGrad Animation">
           <div class="media-caption">Animated: AdaGrad dampening steps as denominator accumulates</div>
         </div>
       </div>
@@ -835,7 +1072,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/rmsprop.gif" alt="RMSProp Animation">
+          <img src="../../figures/gif/rmsprop.gif" alt="RMSProp Animation">
           <div class="media-caption">Animated: RMSProp equalizing coordinates on ill-conditioned ravine</div>
         </div>
       </div>
@@ -863,7 +1100,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/adam.gif" alt="Adam Animation">
+          <img src="../../figures/gif/adam.gif" alt="Adam Animation">
           <div class="media-caption">Animated: Adam smoothly traversing the ill-conditioned surface</div>
         </div>
       </div>
@@ -893,7 +1130,7 @@
           <p>AdamW restores true weight decay by applying decay <em>directly to weights</em> independent of gradient statistics.</p>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/adamw.gif" alt="AdamW Animation">
+          <img src="../../figures/gif/adamw.gif" alt="AdamW Animation">
           <div class="media-caption">Animated: AdamW regularization with decoupled weight shrinkage</div>
         </div>
       </div>
@@ -922,7 +1159,7 @@
           <p>Searches for flat valleys rather than sharp ravines by calculating gradient at a perturbed worst-case neighbor $w + \rho \frac{\nabla L}{\|\nabla L\|}$.</p>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/lion.gif" alt="Lion Animation">
+          <img src="../../figures/gif/lion.gif" alt="Lion Animation">
           <div class="media-caption">Animated: Lion making discrete-magnitude sign-based steps</div>
         </div>
       </div>
@@ -948,7 +1185,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/05_optimizer_trajectories_ill_conditioned.svg" alt="Optimizer Trajectories">
+          <img src="../../figures/svg/05_optimizer_trajectories_ill_conditioned.svg" alt="Optimizer Trajectories">
           <div class="media-caption">Figure 05: Synchronized trajectories on identical ill-conditioned axes</div>
         </div>
       </div>
@@ -982,7 +1219,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/09_numpy_cnn_architecture.svg" alt="CNN Architecture">
+          <img src="../../figures/svg/09_numpy_cnn_architecture.svg" alt="CNN Architecture">
           <div class="media-caption">Figure 09: Architectural pipeline of the NumPy CNN</div>
         </div>
       </div>
@@ -1008,7 +1245,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/gif/cnn_forward_backward.gif" alt="CNN Forward Backward GIF">
+          <img src="../../figures/gif/cnn_forward_backward.gif" alt="CNN Forward Backward GIF">
           <div class="media-caption">Animated: Signal propagation through convolutional & dense layers</div>
         </div>
       </div>
@@ -1033,7 +1270,7 @@
           </ul>
         </div>
         <div class="media-container">
-          <img src="../figures/svg/10_training_loss_template.svg" alt="Training Loss Template">
+          <img src="../../figures/svg/10_training_loss_template.svg" alt="Training Loss Template">
           <div class="media-caption">Figure 10: Loss & accuracy tracking curves template</div>
         </div>
       </div>
@@ -1101,6 +1338,8 @@
       const zoomedImage = document.getElementById('zoomed-image');
 
       let currentIndex = 0;
+      let touchStartX = null;
+      let touchStartY = null;
 
       function updateSlide(index) {
         if (index < 0) index = 0;
@@ -1109,6 +1348,10 @@
         slides[currentIndex].classList.remove('active');
         currentIndex = index;
         slides[currentIndex].classList.add('active');
+
+        if (window.matchMedia('(max-width: 700px)').matches) {
+          slides[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
         indicator.textContent = `${currentIndex + 1} / ${slides.length}`;
         const pct = ((currentIndex + 1) / slides.length) * 100;
@@ -1240,6 +1483,24 @@
         zoomOverlay.classList.remove('active');
       }
       zoomOverlay.addEventListener('click', closeZoom);
+
+      // Touch navigation for the mobile fork. Vertical swipes are left to page scrolling.
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      document.addEventListener('touchend', (e) => {
+        if (touchStartX === null || touchStartY === null || e.changedTouches.length !== 1) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        touchStartX = null;
+        touchStartY = null;
+        if (!window.matchMedia('(max-width: 700px)').matches || Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+        if (dx < 0) nextSlide();
+        else prevSlide();
+      }, { passive: true });
 
       // Initialize KaTeX on page load
       window.addEventListener('load', () => {
