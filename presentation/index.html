@@ -508,11 +508,11 @@
     <div class="brand">
       <span>📐 UIT CS115 Seminar</span>
       <span class="badge">Optimization & Deep Learning</span>
-      <a class="mobile-link" href="mobile/index.html">Mobile view</a>
+      <a class="mobile-link" href="mobile/index.html?view=mobile">Mobile view</a>
     </div>
     <div class="controls">
       <button class="btn" id="btn-prev" title="Previous Slide (← / Backspace)">◀ Prev</button>
-      <span class="slide-counter" id="slide-indicator">1 / 20</span>
+      <span class="slide-counter" id="slide-indicator">1 / 19</span>
       <button class="btn" id="btn-next" title="Next Slide (→ / Space)">Next ▶</button>
       <button class="btn" id="btn-overview" title="Toggle Slide Grid (O)">⊞ Grid</button>
       <button class="btn" id="btn-fullscreen" title="Fullscreen (F)">⛶ Fullscreen</button>
@@ -1101,6 +1101,17 @@
       const zoomedImage = document.getElementById('zoomed-image');
 
       let currentIndex = 0;
+
+      // Keep one canonical desktop URL while routing phones to the mobile fork.
+      (function routeByViewport() {
+        const params = new URLSearchParams(window.location.search);
+        const forcedView = params.get('view');
+        if (forcedView === 'desktop' || forcedView === 'mobile') return;
+        const mobilePath = `${window.location.pathname.replace(/\/$/, '')}/mobile/`;
+        if (window.matchMedia('(max-width: 700px)').matches && !window.location.pathname.endsWith('/mobile/')) {
+          window.location.replace(`${mobilePath}${window.location.search}${window.location.hash}`);
+        }
+      })();
 
       function updateSlide(index) {
         if (index < 0) index = 0;
