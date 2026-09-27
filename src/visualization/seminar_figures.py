@@ -694,7 +694,7 @@ def make_optimizer_family_map():
     ax.set_ylim(0, 7.2)
     ax.axis("off")
     ax.set_title(
-        "Optimizer story: each variant answers a concrete weakness",
+        "Optimizer variants address different update problems",
         fontsize=TITLE_SIZE,
         pad=12,
     )
@@ -733,7 +733,7 @@ def make_optimizer_family_map():
         2.25,
         1.0,
         "Lion / SAM / L-BFGS",
-        "appendix ideas",
+        "other methods",
         colors["advanced"],
     )
 

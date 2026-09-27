@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+tmp/*
+presentation/archive/
+presentation/vendor
+tmp/pptx-build

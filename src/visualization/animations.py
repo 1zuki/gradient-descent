@@ -23,6 +23,33 @@ ANIMATION_LRS = {
     "adamw": 0.10,
     "lion": 0.04,
 }
+ANIMATION_CONFIGS = {
+    "sphere": {
+        "start": (2.6, 2.0),
+        "xlim": (-3.2, 3.2),
+        "ylim": (-3.2, 3.2),
+        "levels": (2, 5, 10, 15, 25, 35),
+        "learning_rates": ANIMATION_LRS,
+        "label": r"$f(x,y)=x^2+y^2$",
+    },
+    "ill-conditioned": {
+        "start": (2.8, 1.0),
+        "xlim": (-3.2, 3.2),
+        "ylim": (-1.35, 1.35),
+        "levels": (2, 5, 10, 18, 28, 40, 55),
+        "learning_rates": {
+            "sgd": 0.03,
+            "momentum": 0.006,
+            "nesterov": 0.008,
+            "adagrad": 0.30,
+            "rmsprop": 0.07,
+            "adam": 0.10,
+            "adamw": 0.10,
+            "lion": 0.04,
+        },
+        "label": r"$f(x,y)=x^2+25y^2$",
+    },
+}
 ANIMATION_LABELS = {
     "sgd": "Gradient descent",
     "momentum": "Momentum",
@@ -53,9 +80,10 @@ def _trajectory(
 ) -> tuple[np.ndarray, list[np.ndarray]]:
     objective, gradient_fn = OBJECTIVES[objective_name]
     theta = np.asarray(start, dtype=float)
+    learning_rate = ANIMATION_CONFIGS[objective_name]["learning_rates"][optimizer_name]
     optimizer = build_optimizer(
         optimizer_name,
-        ANIMATION_LRS[optimizer_name],
+        learning_rate,
         weight_decay=0.01 if optimizer_name == "adamw" else 0.0,
     )
     points = [theta.copy()]
@@ -87,8 +115,8 @@ def _arrow(ax, start, end, color: str, linestyle: str = "-") -> None:
 def make_optimizer_animation(
     output: Path,
     optimizer_name: str = "sgd",
-    objective_name: str = "sphere",
-    start: tuple[float, float] = (2.6, 2.0),
+    objective_name: str = "ill-conditioned",
+    start: tuple[float, float] | None = None,
     steps: int = 10,
     fps: int = 5,
 ) -> None:
@@ -99,7 +127,10 @@ def make_optimizer_animation(
     if optimizer_name not in ANIMATION_OPTIMIZER_NAMES:
         raise ValueError(f"unsupported animation optimizer: {optimizer_name}")
 
+    config = ANIMATION_CONFIGS[objective_name]
     objective, gradient_fn = OBJECTIVES[objective_name]
+    if start is None:
+        start = config["start"]
     points, gradients = _trajectory(
         optimizer_name,
         objective_name,
@@ -110,6 +141,9 @@ def make_optimizer_animation(
     y_grid = np.linspace(-3.2, 3.2, 220)
     x_mesh, y_mesh = np.meshgrid(x_grid, y_grid)
     values = objective((x_mesh, y_mesh))
+    learning_rate = config["learning_rates"][optimizer_name]
+    x_limits = config["xlim"]
+    y_limits = config["ylim"]
 
     frames = []
     for index in range(steps):
@@ -131,7 +165,7 @@ def make_optimizer_animation(
             x_mesh,
             y_mesh,
             values,
-            levels=(2, 5, 10, 15, 25, 35),
+            levels=config["levels"],
             colors="#94a3b8",
             linewidths=0.9,
             alpha=0.6,
@@ -200,14 +234,11 @@ def make_optimizer_animation(
             bbox={"boxstyle": "round,pad=0.25", "fc": "white", "ec": "#cbd5e1"},
         )
         ax.set(
-            title=(
-                f"{ANIMATION_LABELS[optimizer_name]} on "
-                r"$f(x,y)=x^2+y^2$"
-            ),
+            title=f"{ANIMATION_LABELS[optimizer_name]} on {config['label']}",
             xlabel="x",
             ylabel="y",
-            xlim=(-3.2, 3.2),
-            ylim=(-3.2, 3.2),
+            xlim=x_limits,
+            ylim=y_limits,
         )
         ax.set_aspect("equal", adjustable="box")
         ax.tick_params(labelsize=11)
@@ -230,7 +261,7 @@ def make_optimizer_animation(
 def generate_optimizer_gifs(
     output_dir: Path,
     optimizer_names: tuple[str, ...],
-    objective_name: str = "sphere",
+    objective_name: str = "ill-conditioned",
 ) -> None:
     """Generate one GIF per selected optimizer using the shared visual style."""
 
@@ -486,7 +517,7 @@ def make_cnn_propagation_animation(
         ax.text(
             7.3,
             0.65,
-            "backpropagation computes gradients; the selected optimizer owns the update rule",
+            "backpropagation computes gradients; the optimizer updates parameters",
             ha="center",
             va="center",
             fontsize=10.5,
